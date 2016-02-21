@@ -21,7 +21,11 @@ public class Tweet: CustomStringConvertible
     public var user: User
     public var created: NSDate
     public var id: String?
-    public var media = [MediaItem]()
+    public var media = [MediaItem]() {
+        didSet {
+            if media.count > 0 { print("media = \(media.count)") }
+        }
+    }
     public var mediaMentions = [IndexedKeyword]()
     public var hashtags = [IndexedKeyword]()
     public var urls = [IndexedKeyword]()

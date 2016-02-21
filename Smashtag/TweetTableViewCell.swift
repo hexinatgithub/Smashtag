@@ -12,7 +12,9 @@ class TweetTableViewCell: UITableViewCell
 {
     var tweet: Tweet? {
         didSet {
-            updateUI()
+            if tweet != nil {
+                updateUI()
+            }
         }
     }
     
@@ -54,6 +56,83 @@ class TweetTableViewCell: UITableViewCell
             }
             tweetCreatedLabel?.text = formatter.stringFromDate(tweet.created)
         }
-
+        
+        // highlight
+        highlight()
+    }
+    
+    private func highlight() {
+        highlight(keyword: .URL)
+        highlight(keyword: .HashTag)
+        highlight(keyword: .UserMentions)
+    }
+    
+    private enum Keyword {
+        case URL
+        case HashTag
+        case UserMentions
+    }
+    
+    private func highlight(keyword keyword: Keyword) {
+        var keywords: [Tweet.IndexedKeyword]!
+        switch keyword {
+        case .URL:
+            keywords = tweet!.urls
+        case .HashTag:
+            keywords = tweet!.hashtags
+        case .UserMentions:
+            keywords = tweet!.userMentions
+        }
+        
+        // highlight
+        if !keywords.isEmpty {
+            if let attributeString = tweetTextLabel.attributedText {
+                let mutableAttributedText = NSMutableAttributedString(attributedString: attributeString)
+                for indexedKeyword in keywords {
+                    let range = indexedKeyword.nsrange
+                    mutableAttributedText.addAttributes([NSForegroundColorAttributeName: UIColor.blueColor()], range: range)
+                }
+                tweetTextLabel.attributedText = mutableAttributedText
+            }
+        }
+    }
+    
+    private func highlightHashtags() {
+        if !tweet!.hashtags.isEmpty {
+            if let attributeString = tweetTextLabel.attributedText {
+                let mutableAttributedText = NSMutableAttributedString(attributedString: attributeString)
+                for indexedKeyword in tweet!.hashtags {
+                    let range = indexedKeyword.nsrange
+                    mutableAttributedText.addAttributes([NSForegroundColorAttributeName: UIColor.blueColor()], range: range)
+                }
+                tweetTextLabel.attributedText = mutableAttributedText
+            }
+        }
+    }
+    
+    private func highlightUrls() {
+        if !tweet!.urls.isEmpty {
+            if let attributeString = tweetTextLabel.attributedText {
+                let mutableAttributedText = NSMutableAttributedString(attributedString: attributeString)
+                for indexedKeyword in tweet!.urls {
+                    let range = indexedKeyword.nsrange
+                    mutableAttributedText.addAttributes([NSLinkAttributeName: indexedKeyword.keyword], range: range)
+                }
+                tweetTextLabel.attributedText = mutableAttributedText
+            }
+        }
+    }
+    
+    private func highlightName() {
+        if !tweet!.userMentions.isEmpty {
+            if let attributeString = tweetTextLabel.attributedText {
+                let mutableAttributedText = NSMutableAttributedString(attributedString: attributeString)
+                for indexedKeyword in tweet!.userMentions {
+                    let range = indexedKeyword.nsrange
+                    mutableAttributedText.addAttributes([NSForegroundColorAttributeName: UIColor.blueColor()], range: range)
+                }
+                tweetTextLabel.attributedText = mutableAttributedText
+            }
+        }
     }
 }
