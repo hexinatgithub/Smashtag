@@ -269,10 +269,10 @@
             </objects>
             <point key="canvasLocation" x="-501" y="-1038"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Tweet Tab Bar View Controller-->
         <scene sceneID="KYc-ZM-IiA">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="lf0-qW-SBA" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="lf0-qW-SBA" customClass="TweetTabBarViewController" customModule="Smashtag" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="hms-bp-NLf"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="9N0-QK-kBe">

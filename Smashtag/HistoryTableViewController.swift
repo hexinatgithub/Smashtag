@@ -28,6 +28,8 @@ class HistoryTableViewController: UITableViewController {
         static let Title = "History"
         static let HistoryCell = "HistoryCell"
     }
+    
+    var tweetTableViewController: TweetTableViewController!
 
     // MARK: - Table View lifecycle
     override func viewWillAppear(animated: Bool) {
@@ -41,9 +43,7 @@ class HistoryTableViewController: UITableViewController {
     
     // MARK: - Table View Delegate
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let navigationController = tabBarController?.viewControllers?.first as! UINavigationController
-        let vc = navigationController.viewControllers.first as! TweetTableViewController
-        vc.searchText = history[indexPath.row]
+        tweetTableViewController.searchText = history[indexPath.row]
         tabBarController?.selectedIndex = 0
     }
     
