@@ -26,7 +26,11 @@ public class Tweet: CustomStringConvertible
             if media.count > 0 { print("media = \(media.count)") }
         }
     }
-    public var mediaMentions = [IndexedKeyword]()
+    public var mediaMentions = [IndexedKeyword]() {
+        didSet {
+            if mediaMentions.count > 0 { print("media = \(mediaMentions.count)") }
+        }
+    }
     public var hashtags = [IndexedKeyword]()
     public var urls = [IndexedKeyword]()
     public var userMentions = [IndexedKeyword]()

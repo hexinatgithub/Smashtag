@@ -17,6 +17,10 @@ extension UITableViewController {
     }
 }
 
+struct UserDefaults {
+    static let History = "History"
+}
+
 class TweetTableViewController: UITableViewController, UITextFieldDelegate
 {
     // MARK: - Public API
@@ -29,7 +33,33 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate
             searchTextField?.text = searchText
             tweets.removeAll()
             tableView.reloadData() // clear out the table view
+            storeSearchHistory()
             refresh()
+        }
+    }
+    
+    private func storeSearchHistory() {
+        func uniqueElementArray(array: [String], element: String, atIndex: Int) -> [String] {
+            var newArray = [String]()
+            for i in 0..<array.count {
+                let item = array[i]
+                if item != element {
+                    newArray.append(item)
+                }
+            }
+            newArray.insert(element, atIndex: 0)
+            return newArray
+        }
+        
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+            if let text = self.searchText {
+                if let oldHistory = NSUserDefaults().valueForKey(UserDefaults.History) as? [String] {
+                    let newHistory = uniqueElementArray(oldHistory, element: text, atIndex: 0)
+                    NSUserDefaults().setObject(newHistory, forKey: UserDefaults.History)
+                } else {
+                    NSUserDefaults().setObject([text], forKey: UserDefaults.History)
+                }
+            }
         }
     }
     
@@ -39,6 +69,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
+        title = Storyboard.Title
         refresh()
     }
     
@@ -118,6 +149,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate
     private struct Storyboard {
         static let CellReuseIdentifier = "Tweet"
         static let SegueToTweetDetail = "TweetDetail"
+        static let Title = "Tweet"
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
